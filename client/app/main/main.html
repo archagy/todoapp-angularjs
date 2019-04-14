@@ -3,6 +3,16 @@
     <h1>'Todo List angular!</h1>
     <p class="lead">Built with angular-fullstack</p>
     <img src="assets/images/yeoman.png" alt="I'm Yeoman">
+      <!-- Actual search box -->
+      <div ng-if="$ctrl.current_user">
+        <div class="form-group has-feedback has-search">
+          <span class="glyphicon glyphicon-search form-control-feedback"></span>
+          <input type="text" class="form-control" placeholder="Search" ng-model="$ctrl.search">
+        </div>
+        <button class="btn-primary" ng-click="$ctrl.addThing()">
+          Add Task
+        </button>
+      </div>
   </div>
 </header>
 
@@ -14,18 +24,27 @@
       <th scope="col">#</th>
       <th scope="col">Name</th>
       <th scope="col">Description</th>
+      <th scope="col">Created at</th>
       <th scope="col">Done</th>
     </tr>
   </thead>
   <tbody>
-     <tr ng-repeat="thing in $ctrl.awesomeThings">
-      <th scope="row"></th>
+     <tr ng-repeat="thing in $ctrl.awesomeThings | filter:$ctrl.search" 
+     ng-click="$evalAsync($ctrl.setActive(thing))"
+      ng-dblclick="$ctrl.doubleClick(thing)"
+      ng-mouseover="$ctrl.showDelete = true"  ng-mouseleave="$ctrl.showDelete = false" 
+     >
+      <td>
+         <span ng-show="$ctrl.showDelete" class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red" ng-click="$ctrl.deleteThing(thing)"></span> 
+      </td>
       <td>{{thing.name}}</td>
       <td> {{thing.info}}</td>
+      <td> {{thing.created_at | date:'dd/M/yyyy HH:mm:ss'}}</td>
       <td>
-          <div class="round">
-            <input type="checkbox" id="checkbox" ng-checked="thing.active"/>
-            <label for="checkbox"></label>
+          <div>
+
+            <input class="checkbox" type="checkbox" ng-model="thing.active" ng-click="$ctrl.setActive(thing)"/>
+            
           </div>
       </td>
     </tr>
@@ -44,8 +63,12 @@
       <center>
         username: <input type="text" name="username" ng-model="$ctrl.user.name"> <br>
         password: <input type="password" name="username" ng-model="$ctrl.user.password"> <br>
-        <button class="btn btn-primary" ng-click="$ctrl.login()"> login</button>
-        <span style="color:red" ng-if="$ctrl.showError"> User/password wrong</span>
+        <button ng-if="$ctrl.status" class="btn btn-primary" ng-click="$ctrl.login()"> login</button>
+        <button ng-if="!$ctrl.status" class="btn btn-primary" ng-click="$ctrl.register()"> register</button>
+
+        <span style="color:red" ng-if="$ctrl.showError"> User/password wrong</span> <br>
+      
+        <a href="#" ng-click="$ctrl.changeStatus()"> Register?</a>
       </center>
     </div>
   </div>

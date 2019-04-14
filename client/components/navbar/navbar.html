@@ -15,6 +15,10 @@
             <a ui-sref="{{item.state}}">{{item.title}}</a>
         </li>
       </ul>
+
+      <ul class="nav navbar-nav navbar-right" ng-if="$ctrl.current_user">
+        <li ng-click="$ctrl.signOut()"><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Out</a></li>
+    </ul>
     </div>
   </div>
 </div>

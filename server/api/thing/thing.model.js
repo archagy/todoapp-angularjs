@@ -6,6 +6,7 @@ import {registerEvents} from './thing.events';
 var ThingSchema = new mongoose.Schema({
   name: String,
   info: String,
+  created_at: Date,
   active: Boolean
 });
 

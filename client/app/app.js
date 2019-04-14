@@ -22,12 +22,13 @@ import constants from './app.constants';
 import util from '../components/util/util.module';
 import user from './user'
 const ngStorage = (() => 'ngStorage')(require('ngstorage'));
+import Modal from '../components/modal/modal.service';
 
 
 import './app.css';
 
 angular.module('todoAngularApp', [ngCookies, ngResource, ngSanitize, ngStorage, uiRouter, uiBootstrap, navbar,
-  footer, main, constants, util, user, 
+  footer, main, constants, util, user, Modal
 ])
   .config(routeConfig)
   .run(['$rootScope','$sessionStorage' ,function($rootScope, $sessionStorage) {
@@ -46,6 +47,6 @@ angular.module('todoAngularApp', [ngCookies, ngResource, ngSanitize, ngStorage, 
 angular.element(document)
   .ready(() => {
     angular.bootstrap(document, ['todoAngularApp'], {
-      strictDi: true
+      strictDi: false
     });
   });
