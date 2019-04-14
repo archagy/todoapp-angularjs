@@ -6,8 +6,10 @@ import ngCookies from 'angular-cookies';
 import ngResource from 'angular-resource';
 import ngSanitize from 'angular-sanitize';
 
+
 import uiRouter from 'angular-ui-router';
 import uiBootstrap from 'angular-ui-bootstrap';
+import {permission, uiPermission} from 'angular-permission';
 
 import {
   routeConfig
@@ -18,13 +20,28 @@ import footer from '../components/footer/footer.component';
 import main from './main/main.component';
 import constants from './app.constants';
 import util from '../components/util/util.module';
+import user from './user'
+const ngStorage = (() => 'ngStorage')(require('ngstorage'));
+
 
 import './app.css';
 
-angular.module('todoAngularApp', [ngCookies, ngResource, ngSanitize, uiRouter, uiBootstrap, navbar,
-  footer, main, constants, util
+angular.module('todoAngularApp', [ngCookies, ngResource, ngSanitize, ngStorage, uiRouter, uiBootstrap, navbar,
+  footer, main, constants, util, user, 
 ])
-  .config(routeConfig);
+  .config(routeConfig)
+  .run(['$rootScope','$sessionStorage' ,function($rootScope, $sessionStorage) {
+  	$rootScope.current_user = $sessionStorage.current_user;
+  	
+	if($rootScope.current_user) {
+  			console.log('user logged in');
+  		} else {
+  			console.log('user is not login in');	
+  		}
+  }]); 
+  
+  	
+  
 
 angular.element(document)
   .ready(() => {

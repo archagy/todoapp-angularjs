@@ -5,6 +5,6 @@ import {
   UtilService
 } from './util.service';
 
-export default angular.module('todoAngularApp.util', [])
+export default angular.module('borneAdminApp.util', [])
   .factory('Util', UtilService)
   .name;

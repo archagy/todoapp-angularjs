@@ -1,15 +1,19 @@
 import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import routing from './main.routes';
+import { isEmpty } from 'lodash';
 
 export class MainController {
 
   awesomeThings = [];
   newThing = '';
-
+  user = {};
   /*@ngInject*/
-  constructor($http) {
+  constructor($http, $rootScope, $sessionStorage) {
     this.$http = $http;
+    this.showError = false;
+    this.current_user = $rootScope.current_user;
+    this.session = $sessionStorage;
   }
 
   $onInit() {
@@ -30,6 +34,19 @@ export class MainController {
 
   deleteThing(thing) {
     this.$http.delete(`/api/things/${thing._id}`);
+  }
+
+  login() {
+
+    this.$http.post('/api/users/', this.user)
+    .then(response => {
+      if(isEmpty(response.data)) {
+        this.showError = true;
+      } else {
+        this.session.current_user = response.data[0];
+        this.current_user = response.data[0];
+      }
+    })
   }
 }
 
