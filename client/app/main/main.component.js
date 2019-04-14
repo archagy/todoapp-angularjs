@@ -115,6 +115,7 @@ export class MainController {
     case 'update':
       let newMap = map(this.awesomeThings, (thing)=> {
          if(this.original._id === thing._id) {
+           this.original.created_at = new Date().toISOString();
            return this.original;
          } else {
            return thing;
@@ -125,7 +126,7 @@ export class MainController {
       this.$http.put(`/api/things/${this.original._id}`, {$set: {
         'name': this.original.name,
         'info': this.original.info,
-        'created_at': new Date().toISOString()
+        'created_at': this.original.created_at
         }
         }).then(()=>{
           this.myModalInstance.dismiss();
