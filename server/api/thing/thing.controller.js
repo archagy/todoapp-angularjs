@@ -66,7 +66,8 @@ function handleError(res, statusCode) {
 
 // Gets a list of Things
 export function index(req, res) {
-  return Thing.find().exec()
+  let userid = req.params.id;
+  return Thing.find({'_userId': userid}).exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }

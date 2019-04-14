@@ -2,7 +2,7 @@ import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 
 import routing from './main.routes';
-import { isEmpty, filter, map,  } from 'lodash';
+import { isEmpty, filter, map, match } from 'lodash';
 
 
 export class MainController {
@@ -30,7 +30,7 @@ export class MainController {
   }
 
   $onInit() {
-    this.$http.get('/api/things')
+    this.$http.get(`/api/things/user/${this.current_user._id}`)
       .then(response => {
         this.awesomeThings = response.data;
       });
@@ -81,7 +81,7 @@ export class MainController {
 
         <div class="modal-body">
             <strong> Name: </strong> <br>
-            <input type="text" ng-model="modalCtrl.original.name"/> <br> <br>
+            <input type="text" ng-model="modalCtrl.original.name" /> <br> <br>
             
             <strong>Description: </strong> <br>
             <textarea rows="4" cols="50" type="text" ng-model="modalCtrl.original.info"> </textarea>
@@ -102,7 +102,15 @@ export class MainController {
     this.myModalInstance.dismiss();
   }
 
+  isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+  }
+
   save(scenario) {
+    if(this.isBlank(this.original.name) || this.isBlank(this.original.info)) {
+      alert('Please fill all the fields');
+      return;
+    }
     switch(scenario){
     case 'update':
       let newMap = map(this.awesomeThings, (thing)=> {
@@ -126,6 +134,7 @@ export class MainController {
       case 'save':
         this.original.created_at = new Date().toISOString();
         this.original.active = false;
+        this.original._userId = this.current_user._id;
         this.$http.post('/api/things/create', this.original).then((res)=>{
           if(res.data) {
             console.log(res)
